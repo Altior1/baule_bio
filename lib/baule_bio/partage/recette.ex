@@ -1,4 +1,7 @@
 defmodule BauleBio.Partage.Recette do
+  @moduledoc """
+  The Recette schema.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
