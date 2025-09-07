@@ -35,3 +35,5 @@ baule_bio-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# on retire le .env
+.env
