@@ -17,7 +17,13 @@ defmodule BauleBioWeb.Router do
   scope "/", BauleBioWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/home", PageController, :home
+    live "/", HomeLive, :home
+
+    live "/recettes", RecetteLive.Index, :index
+    live "/recettes/new", RecetteLive.Form, :new
+    live "/recettes/:id", RecetteLive.Show, :show
+    live "/recettes/:id/edit", RecetteLive.Form, :edit
   end
 
   # Other scopes may use custom stacks.
