@@ -1,14 +1,22 @@
 import Config
 
+username = System.get_env("PHX_DBUSER") || raise "username not defined"
+password = System.get_env("PHX_DBPASSWORD") || raise "password not defined"
+hostname = System.get_env("PHX_DBHOST") || raise "hostname not defined"
+database = System.get_env("PHX_DBNAME") || raise "database not defined"
+port = System.get_env("PHX_DBPORT") || "5432"
+env_db_pool_size = System.get_env("PHX_DBPOOLSIZE") || "1"
+secret_key_base = System.get_env("PHX_SECRET_KEY_BASE") || "raise \"secret_key_base not defined\""
+
 # Configure your database
 config :baule_bio, BauleBio.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "baule_bio_dev",
+  username: username,
+  password: password,
+  hostname: hostname,
+  database: database,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: String.to_integer(env_db_pool_size)
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -19,11 +27,19 @@ config :baule_bio, BauleBio.Repo,
 config :baule_bio, BauleBioWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: String.to_integer(System.get_env("PORT") || "4000")],
+  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [
+    # Enable IPv6 and bind on all interfaces.
+    # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
+    # See the documentation on https://hexdocs.pm/bandit/Bandit.html#t:options/0
+    # for details about using IPv6 vs IPv4 and loopback vs public addresses.
+    ip: {0, 0, 0, 0, 0, 0, 0, 0},
+    port: port
+  ],
+  secret_key_base: secret_key_base,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "gSWAacKurXchSU/0Nl2KkS8bm2zRJgNwME1PBOCJJR08xqe/YQiqZbx3l/3SRaAw",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:baule_bio, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:baule_bio, ~w(--watch)]}
