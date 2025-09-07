@@ -37,3 +37,6 @@ npm-debug.log
 
 # on retire le .env
 .env
+
+# retirer le dossier db
+/db/
