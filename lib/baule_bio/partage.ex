@@ -56,6 +56,15 @@ defmodule BauleBio.Partage do
   end
 
   @doc """
+  permet de créer plus facilement une recette avec plusieurs ingrédients
+  """
+  def create_recette_many(attrs \\ %{}) do
+    %Recette{}
+    |> Recette.changeset_for_many(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Updates a recette.
 
   ## Examples
@@ -70,6 +79,15 @@ defmodule BauleBio.Partage do
   def update_recette(%Recette{} = recette, attrs) do
     recette
     |> Recette.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  permet de mettre à jour plus facilement une recette avec plusieurs ingrédients
+  """
+  def update_recette_many(%Recette{} = recette, attrs) do
+    recette
+    |> Recette.changeset_for_many(attrs)
     |> Repo.update()
   end
 
@@ -100,5 +118,12 @@ defmodule BauleBio.Partage do
   """
   def change_recette(%Recette{} = recette, attrs \\ %{}) do
     Recette.changeset(recette, attrs)
+  end
+
+  def change_recette_many(
+        %Recette{} = recette,
+        attrs \\ %{}
+      ) do
+    Recette.prepare_changeset_for_many(recette, attrs)
   end
 end
