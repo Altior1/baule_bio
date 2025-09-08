@@ -141,7 +141,15 @@ defmodule BauleBio.Partage do
     Recette.prepare_changeset_for_many(recette, attrs)
   end
 
+  def list_ingredients do
+    Repo.all(Ingredient)
+  end
+
   def get_ingredient!(id) do
     Repo.get!(Ingredient, id)
+  end
+
+  def change_ingredient(%Ingredient{} = ingredient \\ %{}, attrs \\ %{}) do
+    Ingredient.changeset(ingredient, attrs)
   end
 end
