@@ -43,6 +43,14 @@ defmodule BauleBio.Partage do
   """
   def get_recette!(id), do: Repo.get!(Recette, id)
 
+  def get_recette_with_ingredients!(id) do
+    Repo.one!(
+      from r in Recette,
+        where: r.id == ^id,
+        preload: [:ingredients]
+    )
+  end
+
   @doc """
   Creates a recette.
 

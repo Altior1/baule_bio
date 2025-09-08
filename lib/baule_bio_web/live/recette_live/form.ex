@@ -3,6 +3,7 @@ defmodule BauleBioWeb.RecetteLive.Form do
 
   alias BauleBio.Partage
   alias BauleBio.Partage.Recette
+  alias BauleBio.Partage.Ingredient
 
   @impl true
   def render(assigns) do
@@ -42,7 +43,7 @@ defmodule BauleBioWeb.RecetteLive.Form do
   defp return_to(_), do: "index"
 
   defp apply_action(socket, :edit, %{"id" => id}) do
-    recette = Partage.get_recette!(id)
+    recette = Partage.get_recette_with_ingredients!(id)
 
     socket
     |> assign(:page_title, "Edit Recette")
@@ -51,7 +52,7 @@ defmodule BauleBioWeb.RecetteLive.Form do
   end
 
   defp apply_action(socket, :new, _params) do
-    recette = %Recette{}
+    recette = %Recette{ingredients: [%Ingredient{}]}
 
     socket
     |> assign(:page_title, "New Recette")
