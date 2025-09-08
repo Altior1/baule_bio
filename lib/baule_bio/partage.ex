@@ -7,6 +7,8 @@ defmodule BauleBio.Partage do
   alias BauleBio.Repo
 
   alias BauleBio.Partage.Recette
+  alias BauleBio.Partage.Ingredient
+  alias BauleBio.Partage.IngredientRecette
 
   @doc """
   Returns the list of recettes.
@@ -19,6 +21,10 @@ defmodule BauleBio.Partage do
   """
   def list_recettes do
     Repo.all(Recette)
+  end
+
+  def list_recettes_with_ingredients do
+    Repo.all(from r in Recette, preload: [:ingredients])
   end
 
   @doc """
@@ -125,5 +131,9 @@ defmodule BauleBio.Partage do
         attrs \\ %{}
       ) do
     Recette.prepare_changeset_for_many(recette, attrs)
+  end
+
+  def get_ingredient!(id) do
+    Repo.get!(Ingredient, id)
   end
 end

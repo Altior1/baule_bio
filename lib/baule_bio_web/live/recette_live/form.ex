@@ -15,6 +15,11 @@ defmodule BauleBioWeb.RecetteLive.Form do
 
       <.form for={@form} id="recette-form" phx-change="validate" phx-submit="save">
         <.input field={@form[:nom]} type="text" label="Nom" />
+        <.inputs_for :let={ig} field={@form[:ingredients]}>
+          <.input field={ig[:quantite]} type="text" label="Quantite" />
+          <.input field={ig[:nom]} type="text" label="Ingredient" />
+        </.inputs_for>
+
         <.input field={@form[:description]} type="text" label="Description" />
         <footer>
           <.button phx-disable-with="Saving..." variant="primary">Save Recette</.button>
@@ -42,7 +47,7 @@ defmodule BauleBioWeb.RecetteLive.Form do
     socket
     |> assign(:page_title, "Edit Recette")
     |> assign(:recette, recette)
-    |> assign(:form, to_form(Partage.change_recette(recette)))
+    |> assign(:form, to_form(Partage.change_recette_many(recette)))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -51,7 +56,7 @@ defmodule BauleBioWeb.RecetteLive.Form do
     socket
     |> assign(:page_title, "New Recette")
     |> assign(:recette, recette)
-    |> assign(:form, to_form(Partage.change_recette(recette)))
+    |> assign(:form, to_form(Partage.change_recette_many(recette)))
   end
 
   @impl true

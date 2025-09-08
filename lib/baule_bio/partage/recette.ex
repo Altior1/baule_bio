@@ -23,7 +23,7 @@ defmodule BauleBio.Partage.Recette do
   @doc false
   def changeset(recette, attrs) do
     recette
-    |> cast(attrs, [:ingredient, :nom, :description])
+    |> cast(attrs, [:nom, :description])
     |> cast_assoc(:ingredients, with: &BauleBio.Partage.Ingredient.changeset/2)
     |> validate_required([:nom, :description])
   end
@@ -40,8 +40,8 @@ defmodule BauleBio.Partage.Recette do
         nil ->
           changeset |> add_error(:list_ingredients, "doit contenir au moins un ingrédient")
 
-        list when is_list(list) ->
-          changeset |> put_assoc(:ingredients, Enum.map(list || [], &Partage.Ingredient.get!(&1)))
+        list ->
+          changeset |> put_assoc(:ingredients, Enum.map(list || [], &Partage.get_ingredient!(&1)))
       end
     end
 
