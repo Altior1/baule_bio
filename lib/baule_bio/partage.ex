@@ -149,7 +149,13 @@ defmodule BauleBio.Partage do
     Repo.get!(Ingredient, id)
   end
 
-  def change_ingredient(%Ingredient{} = ingredient \\ %{}, attrs \\ %{}) do
+  def change_ingredient(%Ingredient{} = ingredient, attrs \\ %{}) do
     Ingredient.changeset(ingredient, attrs)
+  end
+
+  def create_ingredient(attrs \\ %{}) do
+    %Ingredient{}
+    |> Ingredient.changeset(attrs)
+    |> Repo.insert()
   end
 end

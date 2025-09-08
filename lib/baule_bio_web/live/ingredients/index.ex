@@ -25,7 +25,6 @@ defmodule BauleBioWeb.Ingredients.Index do
             <td>
               <td>{ingredient.nom}</td>
               <.link navigate={~p"/ingredients/#{ingredient.id}/edit"}>Edit</.link>
-              <.link navigate={~p"/ingredients/#{ingredient.id}/delete"}>Delete</.link>
             </td>
           </tr>
         <% end %>

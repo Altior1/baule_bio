@@ -38,6 +38,61 @@ defmodule BauleBioWeb.Layouts do
     <header class="navbar px-4 sm:px-6 lg:px-8">
       <div class="flex-1">
         <a href={~p"/"} class="btn btn-ghost btn-sm rounded-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 32 32"
+            width="28"
+            height="28"
+            class="inline-block mr-2 align-middle"
+          >
+            <g>
+              <!-- Outer layer -->
+              <ellipse
+                cx="16"
+                cy="16"
+                rx="12"
+                ry="14"
+                fill="#e2c290"
+                stroke="#bfa76f"
+                stroke-width="2"
+              />
+              <!-- Middle layer -->
+              <ellipse
+                cx="16"
+                cy="16"
+                rx="8"
+                ry="10"
+                fill="#f5e6b2"
+                stroke="#d1c08a"
+                stroke-width="1.5"
+              />
+              <!-- Inner layer -->
+              <ellipse cx="16" cy="16" rx="4" ry="6" fill="#fffbe6" stroke="#e2c290" stroke-width="1" />
+              <!-- Tor onion: layered inner ellipses -->
+              <ellipse
+                cx="16"
+                cy="16"
+                rx="2.5"
+                ry="4"
+                fill="#e2c290"
+                stroke="#bfa76f"
+                stroke-width="0.7"
+              />
+              <ellipse
+                cx="16"
+                cy="16"
+                rx="1.2"
+                ry="2.2"
+                fill="#fffbe6"
+                stroke="#d1c08a"
+                stroke-width="0.5"
+              />
+              <!-- Onion root -->
+              <rect x="14" y="28" width="4" height="3" rx="1" fill="#bfa76f" />
+              <!-- Onion sprout (Tor-style, more curved) -->
+              <path d="M16 6 Q15 2, 18 4 Q17 7, 16 6" stroke="#7bb661" stroke-width="1.5" fill="none" />
+            </g>
+          </svg>
           <h1>Baule Bio</h1>
         </a>
       </div>
@@ -48,6 +103,12 @@ defmodule BauleBioWeb.Layouts do
           </li>
           <li>
             <a href={~p"/recettes/new"} class="btn btn-ghost">proposer une recettes</a>
+          </li>
+          <li>
+            <a href={~p"/ingredients"} class="btn btn-ghost">Lien vers les ingrédients</a>
+          </li>
+          <li>
+            <a href={~p"/ingredients/new"} class="btn btn-ghost">ajouter un ingrédient</a>
           </li>
           <li>
             <.theme_toggle />
