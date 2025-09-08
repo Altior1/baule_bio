@@ -24,6 +24,11 @@ defmodule BauleBioWeb.Router do
     live "/recettes/new", RecetteLive.Form, :new
     live "/recettes/:id", RecetteLive.Show, :show
     live "/recettes/:id/edit", RecetteLive.Form, :edit
+
+    live "/ingredients", Ingredients.Index, :index
+    live "/ingredients/new", Ingredients.Form, :new
+    live "/ingredients/:id/edit", Ingredients.Form, :edit
+    live "/ingredients/:id/delete", Ingredients.Delete, :delete
   end
 
   # Other scopes may use custom stacks.

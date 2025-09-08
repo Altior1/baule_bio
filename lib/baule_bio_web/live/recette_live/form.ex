@@ -18,10 +18,10 @@ defmodule BauleBioWeb.RecetteLive.Form do
         <.input field={@form[:nom]} type="text" label="Nom" />
         <.inputs_for :let={ig} field={@form[:ingredients]}>
           <.input field={ig[:quantite]} type="text" label="Quantite" />
-          <.input field={ig[:nom]} type="text" label="Ingredient" />
+          <.input field={ig[:id]} type="select" label="Ingredient" options={@ingredients} />
         </.inputs_for>
 
-        <.input field={@form[:description]} type="text" label="Description" />
+        <.input field={@form[:description]} type="textarea" label="Description" />
         <footer>
           <.button phx-disable-with="Saving..." variant="primary">Save Recette</.button>
           <.button navigate={return_path(@return_to, @recette)}>Cancel</.button>
@@ -36,6 +36,7 @@ defmodule BauleBioWeb.RecetteLive.Form do
     {:ok,
      socket
      |> assign(:return_to, return_to(params["return_to"]))
+     |> assign(:ingredients, Partage.list_ingredients() |> Enum.map(&{&1.nom, &1.id}))
      |> apply_action(socket.assigns.live_action, params)}
   end
 
