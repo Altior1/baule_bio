@@ -12,8 +12,52 @@ defmodule BauleBioWeb.HomeLive do
       <p>
         Découvrez nos produits locaux et de saison, ainsi que des conseils pour une alimentation saine et équilibrée.
       </p>
-      <img src="/images/baule_bio_logo.png" alt="Logo Baule Bio" class="w-32 h-32 mt-4" />
+      <div class="image-container mt-4 flex justify-center items-center overflow-hidden rounded-lg shadow-lg w-full h-64">
+        <img
+          src={~p"/images/champ.jpg"}
+          alt="Image de champ"
+        />
+      </div>
+
+      <.carrousel />
     </Layouts.app>
+    """
+  end
+
+  defp carrousel(assigns) do
+    ~H"""
+    <div class="mt-8">
+      <h2 class="text-2xl font-bold mb-4">Nos produits phares</h2>
+      <div class="carousel-container relative overflow-hidden">
+        <div class="carousel flex space-x-4 transition-transform duration-500 ease-in-out">
+          <div class="carousel-item min-w-full">
+            <img
+              src={~p"/images/tomate.jpg"}
+              alt="Produit 1"
+              class="w-full h-64 object-cover rounded-lg shadow-md"
+            />
+            <div class="mt-2 text-center">Tomates bio</div>
+          </div>
+          <div class="carousel-item min-w-full">
+            <img
+              src={~p"/images/courgette.jpg"}
+              alt="Produit 2"
+              class="w-full h-64 object-cover rounded-lg shadow-md"
+            />
+            <div class="mt-2 text-center">Courgettes fraîches</div>
+          </div>
+          <div class="carousel-item min-w-full">
+            <img
+              src={~p"/images/salade.webp"}
+              alt="Produit 3"
+              class="w-full h-64 object-cover rounded-lg shadow-md"
+            />
+            <div class="mt-2 text-center">Salades croquantes</div>
+          </div>
+        </div>
+        <!-- Navigation buttons can be added here -->
+      </div>
+    </div>
     """
   end
 
