@@ -40,3 +40,6 @@ npm-debug.log
 
 # retirer le dossier db
 /db/
+
+# macOS
+.DS_Store
