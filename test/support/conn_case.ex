@@ -35,4 +35,45 @@ defmodule BauleBioWeb.ConnCase do
     BauleBio.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
+
+  @doc """
+  Setup helper that registers and logs in utilisateurs.
+
+      setup :register_and_log_in_utilisateur
+
+  It stores an updated connection and a registered utilisateur in the
+  test context.
+  """
+  def register_and_log_in_utilisateur(%{conn: conn} = context) do
+    utilisateur = BauleBio.CompteFixtures.utilisateur_fixture()
+    scope = BauleBio.Compte.Scope.for_utilisateur(utilisateur)
+
+    opts =
+      context
+      |> Map.take([:token_authenticated_at])
+      |> Enum.into([])
+
+    %{conn: log_in_utilisateur(conn, utilisateur, opts), utilisateur: utilisateur, scope: scope}
+  end
+
+  @doc """
+  Logs the given `utilisateur` into the `conn`.
+
+  It returns an updated `conn`.
+  """
+  def log_in_utilisateur(conn, utilisateur, opts \\ []) do
+    token = BauleBio.Compte.generate_utilisateur_session_token(utilisateur)
+
+    maybe_set_token_authenticated_at(token, opts[:token_authenticated_at])
+
+    conn
+    |> Phoenix.ConnTest.init_test_session(%{})
+    |> Plug.Conn.put_session(:utilisateur_token, token)
+  end
+
+  defp maybe_set_token_authenticated_at(_token, nil), do: nil
+
+  defp maybe_set_token_authenticated_at(token, authenticated_at) do
+    BauleBio.CompteFixtures.override_token_authenticated_at(token, authenticated_at)
+  end
 end

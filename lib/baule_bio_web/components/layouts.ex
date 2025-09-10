@@ -117,13 +117,31 @@ defmodule BauleBioWeb.Layouts do
       </div>
     </header>
 
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
+    <main class="max-width: 50vw; max-height: 50vh;">
+      <div
+        class="mx-auto space-y-4"
+        style="max-width: 40vw; max-height: 10vh;"
+      >
         {render_slot(@inner_block)}
       </div>
     </main>
 
+    <.footer />
+
     <.flash_group flash={@flash} />
+    """
+  end
+
+  defp footer(assigns) do
+    ~H"""
+    <footer
+      class="footer footer-center p-4 bg-base-200 text-base-content rounded"
+      style="position: fixed; left: 0; bottom: 0; width: 100%;"
+    >
+      <div>
+        <p>© 2024 - Baule Bio</p>
+      </div>
+    </footer>
     """
   end
 

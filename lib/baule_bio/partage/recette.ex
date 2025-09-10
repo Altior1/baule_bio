@@ -12,6 +12,7 @@ defmodule BauleBio.Partage.Recette do
     field :nom, :string
     field :description, :string
     field :list_ingredients, {:array, :string}, virtual: true
+    field :status, Ecto.Enum, values: [:draft, :submitted, :published], default: :draft
 
     many_to_many :ingredients, BauleBio.Partage.Ingredient,
       join_through: IngredientRecette,

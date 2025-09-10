@@ -1,6 +1,8 @@
 defmodule BauleBioWeb.Router do
   use BauleBioWeb, :router
 
+  import BauleBioWeb.UtilisateurAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule BauleBioWeb.Router do
     plug :put_root_layout, html: {BauleBioWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_scope_for_utilisateur
   end
 
   pipeline :api do
@@ -51,5 +54,33 @@ defmodule BauleBioWeb.Router do
       live_dashboard "/dashboard", metrics: BauleBioWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  ## Authentication routes
+
+  scope "/", BauleBioWeb do
+    pipe_through [:browser, :require_authenticated_utilisateur]
+
+    live_session :require_authenticated_utilisateur,
+      on_mount: [{BauleBioWeb.UtilisateurAuth, :require_authenticated}] do
+      live "/utilisateurs/settings", UtilisateurLive.Settings, :edit
+      live "/utilisateurs/settings/confirm-email/:token", UtilisateurLive.Settings, :confirm_email
+    end
+
+    post "/utilisateurs/update-password", UtilisateurSessionController, :update_password
+  end
+
+  scope "/", BauleBioWeb do
+    pipe_through [:browser]
+
+    live_session :current_utilisateur,
+      on_mount: [{BauleBioWeb.UtilisateurAuth, :mount_current_scope}] do
+      live "/utilisateurs/register", UtilisateurLive.Registration, :new
+      live "/utilisateurs/log-in", UtilisateurLive.Login, :new
+      live "/utilisateurs/log-in/:token", UtilisateurLive.Confirmation, :new
+    end
+
+    post "/utilisateurs/log-in", UtilisateurSessionController, :create
+    delete "/utilisateurs/log-out", UtilisateurSessionController, :delete
   end
 end

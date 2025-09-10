@@ -1,4 +1,7 @@
 import Config
+
+# Only in tests, remove the complexity from the password hashing algorithm
+config :bcrypt_elixir, :log_rounds, 1
 username = System.get_env("PHX_DBUSER") || raise "username not defined"
 password = System.get_env("PHX_DBPASSWORD") || raise "password not defined"
 hostname = System.get_env("PHX_DBHOST") || raise "hostname not defined"

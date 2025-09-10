@@ -7,6 +7,19 @@
 # General application configuration
 import Config
 
+config :baule_bio, :scopes,
+  utilisateur: [
+    default: true,
+    module: BauleBio.Compte.Scope,
+    assign_key: :current_scope,
+    access_path: [:utilisateur, :id],
+    schema_key: :utilisateur_id,
+    schema_type: :id,
+    schema_table: :utilisateurs,
+    test_data_fixture: BauleBio.CompteFixtures,
+    test_setup_helper: :register_and_log_in_utilisateur
+  ]
+
 config :baule_bio,
   ecto_repos: [BauleBio.Repo],
   generators: [timestamp_type: :utc_datetime]
