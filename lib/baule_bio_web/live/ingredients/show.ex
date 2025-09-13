@@ -6,7 +6,6 @@ defmodule BauleBioWeb.Ingredients.Show do
   use BauleBioWeb, :live_view
 
   alias BauleBio.Partage
-  alias BauleBio.Partage.Ingredient
 
   @impl true
   def render(assigns) do

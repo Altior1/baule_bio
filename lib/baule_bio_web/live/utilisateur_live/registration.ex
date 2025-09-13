@@ -14,7 +14,10 @@ defmodule BauleBioWeb.UtilisateurLive.Registration do
             Register for an account
             <:subtitle>
               Already registered?
-              <.link navigate={~p"/utilisateurs/log-in"} class="font-semibold text-brand hover:underline">
+              <.link
+                navigate={~p"/utilisateurs/log-in"}
+                class="font-semibold text-brand hover:underline"
+              >
                 Log in
               </.link>
               to your account now.
@@ -30,6 +33,13 @@ defmodule BauleBioWeb.UtilisateurLive.Registration do
             autocomplete="username"
             required
             phx-mounted={JS.focus()}
+          />
+          <.input
+            field={@form[:password]}
+            type="password"
+            label="Password"
+            autocomplete="new-password"
+            required
           />
 
           <.button phx-disable-with="Creating account..." class="btn btn-primary w-full">
@@ -77,7 +87,9 @@ defmodule BauleBioWeb.UtilisateurLive.Registration do
   end
 
   def handle_event("validate", %{"utilisateur" => utilisateur_params}, socket) do
-    changeset = Compte.change_utilisateur_email(%Utilisateur{}, utilisateur_params, validate_unique: false)
+    changeset =
+      Compte.change_utilisateur_email(%Utilisateur{}, utilisateur_params, validate_unique: false)
+
     {:noreply, assign_form(socket, Map.put(changeset, :action, :validate))}
   end
 
