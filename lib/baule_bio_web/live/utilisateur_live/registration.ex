@@ -25,7 +25,22 @@ defmodule BauleBioWeb.UtilisateurLive.Registration do
           </.header>
         </div>
 
-        <.form for={@form} id="registration_form" phx-submit="save" phx-change="validate">
+        <.form for={@form} id="registration_form" phx-submit="save_mail" phx-change="validate">
+          <.input
+            field={@form[:email]}
+            type="email"
+            label="Email"
+            autocomplete="username"
+            required
+            phx-mounted={JS.focus()}
+          />
+
+          <.button phx-disable-with="Creating account..." class="btn btn-primary w-full">
+            Create an account
+          </.button>
+        </.form>
+
+        <.form for={@form} id="registration_form" phx-submit="save_password" phx-change="validate">
           <.input
             field={@form[:email]}
             type="email"
@@ -40,6 +55,7 @@ defmodule BauleBioWeb.UtilisateurLive.Registration do
             label="Password"
             autocomplete="new-password"
             required
+            minlength={12}
           />
 
           <.button phx-disable-with="Creating account..." class="btn btn-primary w-full">
@@ -64,7 +80,7 @@ defmodule BauleBioWeb.UtilisateurLive.Registration do
   end
 
   @impl true
-  def handle_event("save", %{"utilisateur" => utilisateur_params}, socket) do
+  def handle_event("save_mail", %{"utilisateur" => utilisateur_params}, socket) do
     case Compte.register_utilisateur(utilisateur_params) do
       {:ok, utilisateur} ->
         {:ok, _} =

@@ -117,10 +117,11 @@ defmodule BauleBioWeb.Layouts do
       </div>
     </header>
 
-    <main class="max-width: 50vw; max-height: 50vh;">
+    <%!-- adjust 80px/64px to match your header/footer heights --%>
+    <main>
       <div
-        class="mx-auto space-y-4"
-        style="max-width: 40vw; max-height: 10vh;"
+        class="w-full flex-1 overflow-y-scroll scrollbar-hide px-4 sm:px-6 lg:px-8"
+        style="height: calc(100vh - 80px - 64px);"
       >
         {render_slot(@inner_block)}
       </div>
