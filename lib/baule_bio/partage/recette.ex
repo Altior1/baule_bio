@@ -14,8 +14,10 @@ defmodule BauleBio.Partage.Recette do
     field :list_ingredients, {:array, :string}, virtual: true
     field :status, Ecto.Enum, values: [:draft, :submitted, :published], default: :draft
 
+    belongs_to :auteur, BauleBio.Compte.Utilisateur
+
     many_to_many :ingredients, BauleBio.Partage.Ingredient,
-      join_through: IngredientRecette,
+      join_through: BauleBio.Partage.IngredientRecette,
       on_replace: :delete
 
     timestamps(type: :utc_datetime)
@@ -24,7 +26,7 @@ defmodule BauleBio.Partage.Recette do
   @doc false
   def changeset(recette, attrs) do
     recette
-    |> cast(attrs, [:nom, :description])
+    |> cast(attrs, [:nom, :description, :auteur_id, :status])
     |> cast_assoc(:ingredients, with: &BauleBio.Partage.Ingredient.changeset/2)
     |> validate_required([:nom, :description])
   end

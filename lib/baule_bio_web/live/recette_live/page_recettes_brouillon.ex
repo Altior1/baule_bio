@@ -10,7 +10,7 @@ defmodule BauleBioWeb.RecetteLive.PageRecettesBrouillon do
     {:ok, assign(socket, recettes: recettes)}
   end
 
-  defp list_recettes(%Scope{} = current_scope) do
+  defp list_recettes(%Scope{} = _current_scope) do
     Partage.list_recettes()
   end
 end

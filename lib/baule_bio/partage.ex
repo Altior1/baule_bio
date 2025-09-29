@@ -8,7 +8,6 @@ defmodule BauleBio.Partage do
 
   alias BauleBio.Partage.Recette
   alias BauleBio.Partage.Ingredient
-  alias BauleBio.Partage.IngredientRecette
 
   @doc """
   Returns the list of recettes.
@@ -25,6 +24,20 @@ defmodule BauleBio.Partage do
 
   def list_recettes_with_ingredients do
     Repo.all(from r in Recette, preload: [:ingredients])
+  end
+
+  @doc """
+  Retourne la liste des recettes publiées (status :published).
+  """
+  def list_recettes_published do
+    Repo.all(from r in Recette, where: r.status == :published)
+  end
+
+  @doc """
+  Retourne la liste des recettes à valider (status :submitted).
+  """
+  def list_recettes_to_validate do
+    Repo.all(from r in Recette, where: r.status == :submitted)
   end
 
   @doc """

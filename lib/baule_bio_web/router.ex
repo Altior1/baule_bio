@@ -24,14 +24,10 @@ defmodule BauleBioWeb.Router do
     live "/", HomeLive, :home
 
     live "/recettes", RecetteLive.Index, :index
-    live "/recettes/new", RecetteLive.Form, :new
     live "/recettes/:id", RecetteLive.Show, :show
-    live "/recettes/:id/edit", RecetteLive.Form, :edit
 
     live "/ingredients", Ingredients.Index, :index
-    live "/ingredients/new", Ingredients.Form, :new
     live "/ingredients/:id", Ingredients.Show, :show
-    live "/ingredients/:id/edit", Ingredients.Form, :edit
   end
 
   # Other scopes may use custom stacks.
@@ -65,6 +61,11 @@ defmodule BauleBioWeb.Router do
       on_mount: [{BauleBioWeb.UtilisateurAuth, :require_authenticated}] do
       live "/utilisateurs/settings", UtilisateurLive.Settings, :edit
       live "/utilisateurs/settings/confirm-email/:token", UtilisateurLive.Settings, :confirm_email
+      live "/recettes/new", RecetteLive.Form, :new
+      live "/recettes/:id/edit", RecetteLive.Form, :edit
+      live "/ingredients/new", Ingredients.Form, :new
+      live "/ingredients/:id/edit", Ingredients.Form, :edit
+      live "/admin/recettes", RecetteLive.Admin, :index
     end
 
     post "/utilisateurs/update-password", UtilisateurSessionController, :update_password

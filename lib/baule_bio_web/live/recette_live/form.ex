@@ -85,11 +85,20 @@ defmodule BauleBioWeb.RecetteLive.Form do
   end
 
   defp save_recette(socket, :new, recette_params) do
-    case Partage.create_recette(recette_params) do
+    # Ajouter l'auteur et définir le statut comme soumis
+    current_user = socket.assigns.current_scope.utilisateur
+
+    recette_params =
+      Map.merge(recette_params, %{
+        "auteur_id" => current_user.id,
+        "status" => "submitted"
+      })
+
+    case Partage.create_recette_many(recette_params) do
       {:ok, recette} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Recette created successfully")
+         |> put_flash(:info, "Recette soumise pour validation")
          |> push_navigate(to: return_path(socket.assigns.return_to, recette))}
 
       {:error, %Ecto.Changeset{} = changeset} ->

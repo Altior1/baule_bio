@@ -60,6 +60,6 @@ defmodule BauleBioWeb.RecetteLive.Index do
   end
 
   defp list_recettes() do
-    Partage.list_recettes()
+    Partage.list_recettes_published()
   end
 end

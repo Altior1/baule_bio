@@ -99,16 +99,32 @@ defmodule BauleBioWeb.Layouts do
       <div class="flex-none">
         <ul class="flex flex-column px-1 space-x-4 items-center">
           <li>
-            <a href={~p"/recettes"} class="btn btn-ghost">Lien vers les recettes</a>
+            <a href={~p"/recettes"} class="btn btn-ghost">Recettes</a>
           </li>
+          <%= if @current_scope do %>
+            <li>
+              <a href={~p"/recettes/new"} class="btn btn-ghost">Proposer une recette</a>
+            </li>
+            <%= if @current_scope.utilisateur.role == "admin" do %>
+              <li>
+                <a href={~p"/admin/recettes"} class="btn btn-ghost">Administration</a>
+              </li>
+            <% end %>
+            <li>
+              <a href={~p"/utilisateurs/log-out"} class="btn btn-ghost" data-method="delete">
+                Déconnexion
+              </a>
+            </li>
+          <% else %>
+            <li>
+              <a href={~p"/utilisateurs/log-in"} class="btn btn-ghost">Connexion</a>
+            </li>
+            <li>
+              <a href={~p"/utilisateurs/register"} class="btn btn-ghost">Inscription</a>
+            </li>
+          <% end %>
           <li>
-            <a href={~p"/recettes/new"} class="btn btn-ghost">proposer une recettes</a>
-          </li>
-          <li>
-            <a href={~p"/ingredients"} class="btn btn-ghost">Lien vers les ingrédients</a>
-          </li>
-          <li>
-            <a href={~p"/ingredients/new"} class="btn btn-ghost">ajouter un ingrédient</a>
+            <a href={~p"/ingredients"} class="btn btn-ghost">Ingrédients</a>
           </li>
           <li>
             <.theme_toggle />
