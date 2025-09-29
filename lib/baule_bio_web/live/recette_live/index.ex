@@ -10,9 +10,11 @@ defmodule BauleBioWeb.RecetteLive.Index do
       <.header>
         Listing Recettes
         <:actions>
-          <.button variant="primary" navigate={~p"/recettes/new"}>
-            <.icon name="hero-plus" /> New Recette
-          </.button>
+          <%= if @current_scope do %>
+            <.link navigate={~p"/recettes/new"} class="btn btn-primary">
+              <.icon name="hero-plus" class="size-4" /> New Recette
+            </.link>
+          <% end %>
         </:actions>
       </.header>
 
@@ -21,16 +23,17 @@ defmodule BauleBioWeb.RecetteLive.Index do
         rows={@streams.recettes}
         row_click={fn {_id, recette} -> JS.navigate(~p"/recettes/#{recette}") end}
       >
-        <:col :let={{_id, recette}} label="Ingredient">{recette.ingredient}</:col>
         <:col :let={{_id, recette}} label="Nom">{recette.nom}</:col>
         <:col :let={{_id, recette}} label="Description">{recette.description}</:col>
         <:action :let={{_id, recette}}>
           <div class="sr-only">
             <.link navigate={~p"/recettes/#{recette}"}>Show</.link>
           </div>
-          <.link navigate={~p"/recettes/#{recette}/edit"}>Edit</.link>
+          <%= if @current_scope do %>
+            <.link navigate={~p"/recettes/#{recette}/edit"}>Edit</.link>
+          <% end %>
         </:action>
-        <:action :let={{id, recette}}>
+        <:action :let={{id, recette}} :if={@current_scope}>
           <.link
             phx-click={JS.push("delete", value: %{id: recette.id}) |> hide("##{id}")}
             data-confirm="Are you sure?"

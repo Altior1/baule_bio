@@ -107,7 +107,16 @@ defmodule BauleBioWeb.Layouts do
             </li>
             <%= if @current_scope.utilisateur.role == "admin" do %>
               <li>
-                <a href={~p"/admin/recettes"} class="btn btn-ghost">Administration</a>
+                <div class="dropdown dropdown-end">
+                  <div tabindex="0" role="button" class="btn btn-ghost">Administration</div>
+                  <ul
+                    tabindex="0"
+                    class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                  >
+                    <li><a href={~p"/admin/recettes"}>Recettes</a></li>
+                    <li><a href={~p"/admin/ingredients"}>Ingrédients</a></li>
+                  </ul>
+                </div>
               </li>
             <% end %>
             <li>

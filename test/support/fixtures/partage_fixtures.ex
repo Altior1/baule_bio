@@ -12,7 +12,6 @@ defmodule BauleBio.PartageFixtures do
       attrs
       |> Enum.into(%{
         description: "some description",
-        ingredient: %{},
         nom: "some nom"
       })
       |> BauleBio.Partage.create_recette()

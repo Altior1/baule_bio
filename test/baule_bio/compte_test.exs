@@ -31,7 +31,10 @@ defmodule BauleBio.CompteTest do
       %{id: id} = utilisateur = utilisateur_fixture() |> set_password()
 
       assert %Utilisateur{id: ^id} =
-               Compte.get_utilisateur_by_email_and_password(utilisateur.email, valid_utilisateur_password())
+               Compte.get_utilisateur_by_email_and_password(
+                 utilisateur.email,
+                 valid_utilisateur_password()
+               )
     end
   end
 
@@ -121,11 +124,18 @@ defmodule BauleBio.CompteTest do
     test "sends token through notification", %{utilisateur: utilisateur} do
       token =
         extract_utilisateur_token(fn url ->
-          Compte.deliver_utilisateur_update_email_instructions(utilisateur, "current@example.com", url)
+          Compte.deliver_utilisateur_update_email_instructions(
+            utilisateur,
+            "current@example.com",
+            url
+          )
         end)
 
       {:ok, token} = Base.url_decode64(token, padding: false)
-      assert utilisateur_token = Repo.get_by(UtilisateurToken, token: :crypto.hash(:sha256, token))
+
+      assert utilisateur_token =
+               Repo.get_by(UtilisateurToken, token: :crypto.hash(:sha256, token))
+
       assert utilisateur_token.utilisateur_id == utilisateur.id
       assert utilisateur_token.sent_to == utilisateur.email
       assert utilisateur_token.context == "change:current@example.com"
@@ -139,13 +149,21 @@ defmodule BauleBio.CompteTest do
 
       token =
         extract_utilisateur_token(fn url ->
-          Compte.deliver_utilisateur_update_email_instructions(%{utilisateur | email: email}, utilisateur.email, url)
+          Compte.deliver_utilisateur_update_email_instructions(
+            %{utilisateur | email: email},
+            utilisateur.email,
+            url
+          )
         end)
 
       %{utilisateur: utilisateur, token: token, email: email}
     end
 
-    test "updates the email with a valid token", %{utilisateur: utilisateur, token: token, email: email} do
+    test "updates the email with a valid token", %{
+      utilisateur: utilisateur,
+      token: token,
+      email: email
+    } do
       assert {:ok, %{email: ^email}} = Compte.update_utilisateur_email(utilisateur, token)
       changed_utilisateur = Repo.get!(Utilisateur, utilisateur.id)
       assert changed_utilisateur.email != utilisateur.email
@@ -161,7 +179,10 @@ defmodule BauleBio.CompteTest do
       assert Repo.get_by(UtilisateurToken, utilisateur_id: utilisateur.id)
     end
 
-    test "does not update email if utilisateur email changed", %{utilisateur: utilisateur, token: token} do
+    test "does not update email if utilisateur email changed", %{
+      utilisateur: utilisateur,
+      token: token
+    } do
       assert Compte.update_utilisateur_email(%{utilisateur | email: "current@example.com"}, token) ==
                {:error, :transaction_aborted}
 
@@ -170,7 +191,7 @@ defmodule BauleBio.CompteTest do
     end
 
     test "does not update email if token expired", %{utilisateur: utilisateur, token: token} do
-      {1, nil} = Repo.update_all(UtilisateurToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
+      {_, nil} = Repo.update_all(UtilisateurToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
 
       assert Compte.update_utilisateur_email(utilisateur, token) ==
                {:error, :transaction_aborted}
@@ -273,8 +294,14 @@ defmodule BauleBio.CompteTest do
       end
     end
 
-    test "duplicates the authenticated_at of given utilisateur in new token", %{utilisateur: utilisateur} do
-      utilisateur = %{utilisateur | authenticated_at: DateTime.add(DateTime.utc_now(:second), -3600)}
+    test "duplicates the authenticated_at of given utilisateur in new token", %{
+      utilisateur: utilisateur
+    } do
+      utilisateur = %{
+        utilisateur
+        | authenticated_at: DateTime.add(DateTime.utc_now(:second), -3600)
+      }
+
       token = Compte.generate_utilisateur_session_token(utilisateur)
       assert utilisateur_token = Repo.get_by(UtilisateurToken, token: token)
       assert utilisateur_token.authenticated_at == utilisateur.authenticated_at
@@ -290,7 +317,9 @@ defmodule BauleBio.CompteTest do
     end
 
     test "returns utilisateur by token", %{utilisateur: utilisateur, token: token} do
-      assert {session_utilisateur, token_inserted_at} = Compte.get_utilisateur_by_session_token(token)
+      assert {session_utilisateur, token_inserted_at} =
+               Compte.get_utilisateur_by_session_token(token)
+
       assert session_utilisateur.id == utilisateur.id
       assert session_utilisateur.authenticated_at != nil
       assert token_inserted_at != nil
@@ -302,7 +331,7 @@ defmodule BauleBio.CompteTest do
 
     test "does not return utilisateur for expired token", %{token: token} do
       dt = ~N[2020-01-01 00:00:00]
-      {1, nil} = Repo.update_all(UtilisateurToken, set: [inserted_at: dt, authenticated_at: dt])
+      {_, nil} = Repo.update_all(UtilisateurToken, set: [inserted_at: dt, authenticated_at: dt])
       refute Compte.get_utilisateur_by_session_token(token)
     end
   end
@@ -324,7 +353,7 @@ defmodule BauleBio.CompteTest do
     end
 
     test "does not return utilisateur for expired token", %{token: token} do
-      {1, nil} = Repo.update_all(UtilisateurToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
+      {_, nil} = Repo.update_all(UtilisateurToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
       refute Compte.get_utilisateur_by_magic_link_token(token)
     end
   end
@@ -352,7 +381,7 @@ defmodule BauleBio.CompteTest do
 
     test "raises when unconfirmed utilisateur has password set" do
       utilisateur = unconfirmed_utilisateur_fixture()
-      {1, nil} = Repo.update_all(Utilisateur, set: [hashed_password: "hashed"])
+      {_, nil} = Repo.update_all(Utilisateur, set: [hashed_password: "hashed"])
       {encoded_token, _hashed_token} = generate_utilisateur_magic_link_token(utilisateur)
 
       assert_raise RuntimeError, ~r/magic link log in is not allowed/, fn ->
@@ -382,7 +411,10 @@ defmodule BauleBio.CompteTest do
         end)
 
       {:ok, token} = Base.url_decode64(token, padding: false)
-      assert utilisateur_token = Repo.get_by(UtilisateurToken, token: :crypto.hash(:sha256, token))
+
+      assert utilisateur_token =
+               Repo.get_by(UtilisateurToken, token: :crypto.hash(:sha256, token))
+
       assert utilisateur_token.utilisateur_id == utilisateur.id
       assert utilisateur_token.sent_to == utilisateur.email
       assert utilisateur_token.context == "login"

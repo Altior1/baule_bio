@@ -66,6 +66,9 @@ defmodule BauleBioWeb.Router do
       live "/ingredients/new", Ingredients.Form, :new
       live "/ingredients/:id/edit", Ingredients.Form, :edit
       live "/admin/recettes", RecetteLive.Admin, :index
+      live "/admin/ingredients", Ingredients.Admin, :index
+      live "/admin/ingredients/new", Ingredients.AdminForm, :new
+      live "/admin/ingredients/:id/edit", Ingredients.AdminForm, :edit
     end
 
     post "/utilisateurs/update-password", UtilisateurSessionController, :update_password

@@ -73,7 +73,9 @@ defmodule BauleBio.CompteFixtures do
   end
 
   def generate_utilisateur_magic_link_token(utilisateur) do
-    {encoded_token, utilisateur_token} = Compte.UtilisateurToken.build_email_token(utilisateur, "login")
+    {encoded_token, utilisateur_token} =
+      Compte.UtilisateurToken.build_email_token(utilisateur, "login")
+
     BauleBio.Repo.insert!(utilisateur_token)
     {encoded_token, utilisateur_token.token}
   end

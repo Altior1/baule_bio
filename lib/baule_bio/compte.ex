@@ -122,9 +122,12 @@ defmodule BauleBio.Compte do
     Repo.transact(fn ->
       with {:ok, query} <- UtilisateurToken.verify_change_email_token_query(token, context),
            %UtilisateurToken{sent_to: email} <- Repo.one(query),
-           {:ok, utilisateur} <- Repo.update(Utilisateur.email_changeset(utilisateur, %{email: email})),
+           {:ok, utilisateur} <-
+             Repo.update(Utilisateur.email_changeset(utilisateur, %{email: email})),
            {_count, _result} <-
-             Repo.delete_all(from(UtilisateurToken, where: [utilisateur_id: ^utilisateur.id, context: ^context])) do
+             Repo.delete_all(
+               from(UtilisateurToken, where: [utilisateur_id: ^utilisateur.id, context: ^context])
+             ) do
         {:ok, utilisateur}
       else
         _ -> {:error, :transaction_aborted}
@@ -255,12 +258,21 @@ defmodule BauleBio.Compte do
       {:ok, %{to: ..., body: ...}}
 
   """
-  def deliver_utilisateur_update_email_instructions(%Utilisateur{} = utilisateur, current_email, update_email_url_fun)
+  def deliver_utilisateur_update_email_instructions(
+        %Utilisateur{} = utilisateur,
+        current_email,
+        update_email_url_fun
+      )
       when is_function(update_email_url_fun, 1) do
-    {encoded_token, utilisateur_token} = UtilisateurToken.build_email_token(utilisateur, "change:#{current_email}")
+    {encoded_token, utilisateur_token} =
+      UtilisateurToken.build_email_token(utilisateur, "change:#{current_email}")
 
     Repo.insert!(utilisateur_token)
-    UtilisateurNotifier.deliver_update_email_instructions(utilisateur, update_email_url_fun.(encoded_token))
+
+    UtilisateurNotifier.deliver_update_email_instructions(
+      utilisateur,
+      update_email_url_fun.(encoded_token)
+    )
   end
 
   @doc """
@@ -270,7 +282,11 @@ defmodule BauleBio.Compte do
       when is_function(magic_link_url_fun, 1) do
     {encoded_token, utilisateur_token} = UtilisateurToken.build_email_token(utilisateur, "login")
     Repo.insert!(utilisateur_token)
-    UtilisateurNotifier.deliver_login_instructions(utilisateur, magic_link_url_fun.(encoded_token))
+
+    UtilisateurNotifier.deliver_login_instructions(
+      utilisateur,
+      magic_link_url_fun.(encoded_token)
+    )
   end
 
   @doc """
@@ -288,7 +304,9 @@ defmodule BauleBio.Compte do
       with {:ok, utilisateur} <- Repo.update(changeset) do
         tokens_to_expire = Repo.all_by(UtilisateurToken, utilisateur_id: utilisateur.id)
 
-        Repo.delete_all(from(t in UtilisateurToken, where: t.id in ^Enum.map(tokens_to_expire, & &1.id)))
+        Repo.delete_all(
+          from(t in UtilisateurToken, where: t.id in ^Enum.map(tokens_to_expire, & &1.id))
+        )
 
         {:ok, {utilisateur, tokens_to_expire}}
       end

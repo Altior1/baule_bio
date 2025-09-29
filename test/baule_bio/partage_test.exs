@@ -8,7 +8,7 @@ defmodule BauleBio.PartageTest do
 
     import BauleBio.PartageFixtures
 
-    @invalid_attrs %{description: nil, ingredient: nil, nom: nil}
+    @invalid_attrs %{description: nil, nom: nil}
 
     test "list_recettes/0 returns all recettes" do
       recette = recette_fixture()
@@ -21,11 +21,10 @@ defmodule BauleBio.PartageTest do
     end
 
     test "create_recette/1 with valid data creates a recette" do
-      valid_attrs = %{description: "some description", ingredient: %{}, nom: "some nom"}
+      valid_attrs = %{description: "some description", nom: "some nom"}
 
       assert {:ok, %Recette{} = recette} = Partage.create_recette(valid_attrs)
       assert recette.description == "some description"
-      assert recette.ingredient == %{}
       assert recette.nom == "some nom"
     end
 
@@ -35,11 +34,10 @@ defmodule BauleBio.PartageTest do
 
     test "update_recette/2 with valid data updates the recette" do
       recette = recette_fixture()
-      update_attrs = %{description: "some updated description", ingredient: %{}, nom: "some updated nom"}
+      update_attrs = %{description: "some updated description", nom: "some updated nom"}
 
       assert {:ok, %Recette{} = recette} = Partage.update_recette(recette, update_attrs)
       assert recette.description == "some updated description"
-      assert recette.ingredient == %{}
       assert recette.nom == "some updated nom"
     end
 

@@ -11,17 +11,18 @@ defmodule BauleBioWeb.RecetteLive.Show do
         Recette {@recette.id}
         <:subtitle>This is a recette record from your database.</:subtitle>
         <:actions>
-          <.button navigate={~p"/recettes"}>
-            <.icon name="hero-arrow-left" />
-          </.button>
-          <.button variant="primary" navigate={~p"/recettes/#{@recette}/edit?return_to=show"}>
-            <.icon name="hero-pencil-square" /> Edit recette
-          </.button>
+          <.link navigate={~p"/recettes"} class="btn btn-ghost">
+            <.icon name="hero-arrow-left" class="size-4" />
+          </.link>
+          <%= if @current_scope do %>
+            <.link navigate={~p"/recettes/#{@recette}/edit?return_to=show"} class="btn btn-primary">
+              <.icon name="hero-pencil-square" class="size-4" /> Edit recette
+            </.link>
+          <% end %>
         </:actions>
       </.header>
 
       <.list>
-        <:item title="Ingredient">{@recette.ingredient}</:item>
         <:item title="Nom">{@recette.nom}</:item>
         <:item title="Description">{@recette.description}</:item>
       </.list>
