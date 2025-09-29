@@ -36,7 +36,7 @@ defmodule BauleBioWeb.RecetteLiveTest do
 
     @tag :skip
     test "deletes recette in listing", %{conn: conn, recette: recette} do
-      # Test skipped - requires authentication  
+      # Test skipped - requires authentication
     end
   end
 
@@ -50,7 +50,7 @@ defmodule BauleBioWeb.RecetteLiveTest do
       assert html =~ recette.nom
     end
 
-    @tag :skip  
+    @tag :skip
     test "updates recette and returns to show", %{conn: conn, recette: recette} do
       # Test skipped - requires authentication
     end
